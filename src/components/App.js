@@ -176,11 +176,11 @@ function App() {
           loged={loggedIn}
         />
         <Switch>
-          <Route path='/sign-in'>
-            <Login onLogin={handleLogin}/>
-          </Route>
           <Route path='/sign-up'>
             <Register onRegister={handleRegister}/>
+          </Route>
+          <Route path='/sign-in'>
+            <Login onLogin={handleLogin}/>
           </Route>
           <ProtectedRoute exact path='/'
               component={Main}
