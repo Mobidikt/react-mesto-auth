@@ -1,14 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Register({onRegister}) {
-return(<>
-    <form className='register'>
-        <h2>Регистрация</h2>
+return(
         <form
-          className='register__form'
+          className='register'
           noValidate
         >
-          <label className="popup__field">
+        <h2 className='register__title'>Регистрация</h2>
+          <label className="register__field">
         <input
           name="email"
           type='email'
@@ -23,7 +23,7 @@ return(<>
         />
         <span className="register__error" id="email-error" />
       </label> 
-      <label className="popup__field">
+      <label className="register__field">
         <input
           name="password"
           type="password"
@@ -38,15 +38,8 @@ return(<>
         />
         <span className="register__error" id="password-error" />
       </label>
-        </form>
-        <button type='submit' onClick={onRegister}>Зарегистрироваться</button> 
-        <button
-          type='button'
-          className=''
-        //   onClick={}
-        >Уже зарегистрированы? Войти</button>
-    </form>
-
-</>);
+        <button type='submit' className='register__button' onClick={onRegister}>Зарегистрироваться</button> 
+        <p className='register__text'>Уже зарегистрированы? <Link className='link' to='/sing-in'>Войти</Link></p>
+        </form>);
 }
 export default Register;
