@@ -14,6 +14,7 @@ import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
 import Register from './Register';
 import Login from './Login';
+import { ROUTES_MAP } from '../utils/routesMap';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -171,18 +172,15 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header 
-          email={email} 
-          loged={loggedIn}
-        />
+        <Header />
         <Switch>
-          <Route path='/sign-up'>
+          <Route path={ROUTES_MAP.SIGN_UP}>
             <Register onRegister={handleRegister}/>
           </Route>
-          <Route path='/sign-in'>
+          <Route path={ROUTES_MAP.SIGN_IN}>
             <Login onLogin={handleLogin}/>
           </Route>
-          <ProtectedRoute exact path='/'
+          <ProtectedRoute exact path={ROUTES_MAP.MAIN}
               component={Main}
               cards={cards}
               onCardLike={handleCardLike}
@@ -192,11 +190,9 @@ function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
             />
-          {/* <Route path='*'>
-            <Register onLogin={handleLogin}/>
-          </Route> */}
         </Switch>
         <Footer />
+
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}

@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Register({onRegister}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+  const submitForm = (password, email) => {
+    console.log(email, password)
+    onRegister(password, email);
+  }
 return(
         <form
           className='register'
@@ -12,13 +24,13 @@ return(
         <input
           name="email"
           type='email'
-            placeholder="Email"
+          placeholder="Email"
           className="register__input register__input_email"
           maxLength="40"
           minLength="2"
           id="email"
-        //   value={name || ""}
-        //   onChange={handleNameChange}
+          value={email}
+          onChange={handleEmailChange}
           required
         />
         <span className="register__error" id="email-error" />
@@ -27,18 +39,18 @@ return(
         <input
           name="password"
           type="password"
-          placeholder="Имя"
+          placeholder="Пароль"
           className="register__input register__input_name"
           maxLength="40"
           minLength="2"
-          id="name"
-        //   value={name || ""}
-        //   onChange={handleNameChange}
+          id="password"
+          value={password}
+          onChange={handlePasswordChange}
           required
         />
         <span className="register__error" id="password-error" />
       </label>
-        <button type='submit' className='register__button' onClick={onRegister}>Зарегистрироваться</button> 
+        <button type='submit' className='register__button' onClick={submitForm}>Зарегистрироваться</button> 
         <p className='register__text'>Уже зарегистрированы? <Link className='link' to='/sing-in'>Войти</Link></p>
         </form>);
 }
