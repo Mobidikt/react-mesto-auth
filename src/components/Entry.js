@@ -11,22 +11,21 @@ const handleEmailChange = (e) => {
 const handlePasswordChange = (e) => {
     setPassword(e.target.value);
 };
-const submitForm = (password, email) => {
-    console.log(email, password)
+const submitForm = () => {
     onSubmit(password, email);
 }
 return (
     <form
-          className='register'
+          className='entry'
           noValidate
         >
-        <h2 className='register__title'>{title}</h2>
-          <label className="register__field">
+        <h2 className='entry__title'>{title}</h2>
+          <label className="entry__field">
         <input
           name="email"
           type='email'
           placeholder="Email"
-          className="register__input register__input_email"
+          className="entry__input entry__input_email"
           maxLength="40"
           minLength="2"
           id="email"
@@ -34,14 +33,14 @@ return (
           onChange={handleEmailChange}
           required
         />
-        <span className="register__error" id="email-error" />
+        <span className="entry__error" id="email-error" />
       </label> 
-      <label className="register__field">
+      <label className="entry__field">
         <input
           name="password"
           type="password"
           placeholder="Пароль"
-          className="register__input register__input_name"
+          className="entry__input entry__input_name"
           maxLength="40"
           minLength="2"
           id="password"
@@ -49,10 +48,10 @@ return (
           onChange={handlePasswordChange}
           required
         />
-        <span className="register__error" id="password-error" />
+        <span className="entry__error" id="password-error" />
       </label>
-        <button type='submit' className='register__button' onClick={submitForm}>{buttonName}</button> 
-        <p className='register__text'>{text}<Link className='link' to={link}>{linkText}</Link></p>
+        <button type='button' className='entry__button' onClick={submitForm}>{buttonName}</button> 
+        <p className='entry__text'>{text}<Link className='link' to={link}>{linkText}</Link></p>
         </form>);
 }
 export default Entry;
