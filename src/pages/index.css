@@ -11,8 +11,8 @@
 @import url(../blocks/popup/popup.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
 
-.register__input {
-  width: 358px;
+.entry__input {
+  width: 100%;
   height: 27px;
   margin: 0 0 30px;
   padding: 0 0 12px;
@@ -28,25 +28,24 @@
   background-color: transparent;
   outline: none;
 }
-.register__input::-webkit-input-placeholder {
+.entry__input::-webkit-input-placeholder {
     color: #cccccc;
 }
-.register__input:focus::-webkit-input-placeholder {
+.entry__input:focus::-webkit-input-placeholder {
     opacity: 0;
 }
-.register__field:last-of-type {
+.entry__field:last-of-type {
     margin-bottom: 216px;
 }
 @media screen and (max-width: 555px) {
-  .register__input {
+  .entry__input {
     height: 24px;
     padding-bottom: 11px;
     font-size: 12px;
-    width: 200px;
   }
 }
-.register__button {
-  width: 358px;
+.entry__button {
+  width: 100%;
   height: 50px;
   color: #000000;
   font-style: normal;
@@ -64,24 +63,28 @@
   border-radius: 2px;
   outline: none;
 }
-.register__button:hover {
+.entry__button:hover {
   opacity: 0.85;
 }
 
 @media screen and (max-width: 555px) {
-  .register__button {
-    width: 200px;
+  .entry__button {
     height: 40px;
     font-size: 14px;
   }
 }
-.register{
+.entry{
     max-width: 358px;
     margin: 0 auto 0;
     display: flex;
     flex-direction: column;
 }
-.register__title{
+@media screen and (max-width: 555px) {
+  .entry{
+    width: 260px;
+  }
+}
+.entry__title{
     font-family: Inter;
 font-style: normal;
 font-weight: 900;
@@ -90,13 +93,14 @@ line-height: 29px;
 text-align: center;
 color: #FFFFFF;
 }
-.register__text{ 
+.entry__text{ 
     font-family: Inter;
 font-style: normal;
 font-weight: normal;
 font-size: 14px;
 line-height: 17px;
 color: #FFFFFF;
+text-align: center;
 }
 .link{
 color: #FFFFFF;
