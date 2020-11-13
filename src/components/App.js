@@ -15,6 +15,7 @@ import InfoTooltip from './InfoTooltip';
 import Register from './Register';
 import Login from './Login';
 import { ROUTES_MAP } from '../utils/routesMap';
+import { register, login, getToken } from '../utils/author';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -27,7 +28,6 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [email, setEmail] = React.useState('');
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
  // const history = useHistory();
 
@@ -155,16 +155,19 @@ function App() {
     setAddPlacePopupOpen(false);
     setVerificationPopupOpen(false);
     setImagePopupOpen(false);
+    setInfoTooltipOpen(false);
     setSelectedCard(null);
     document.removeEventListener("keydown", handleEsc);
     document.removeEventListener("click", overlayClose);
   }
 
-  const handleLogin =() =>{
+  const handleLogin =(password, email) =>{
+    login(password, email);
     setInfoTooltipOpen(true);
     setEventListeners();
   }
-  const handleRegister =() =>{
+  const handleRegister =(password, email) =>{
+    console.log(password, email);
     setInfoTooltipOpen(true);
     setEventListeners();
   }

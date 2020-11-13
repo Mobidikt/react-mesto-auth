@@ -4,7 +4,6 @@ import {ROUTES_MAP} from '../utils/routesMap';
 
 function Login ({onLogin}) {
     const submitForm = (password, email) => {
-    console.log(email, password)
     onLogin(password, email);
   }
     return(<Entry

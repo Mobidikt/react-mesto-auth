@@ -30,7 +30,7 @@ export const login = (password, email) => fetch(`${baseUrl}/signin`, {
     if (res.status === 401){
       console.log("пользователь с email не найден"); //Заменить на ответ для пользователя
     }
-    return res.json();
+   return res.json();
   }).then((data) => {
      if (data.token) {
       localStorage.setItem('jwt', data.token);

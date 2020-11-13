@@ -4,7 +4,6 @@ import {ROUTES_MAP} from '../utils/routesMap';
 
 function Register({onRegister}) {
   const submitForm = (password, email) => {
-    console.log(email, password)
     onRegister(password, email);
   }
 
