@@ -11,11 +11,7 @@ export const register = (password, email) => fetch(`${baseUrl}/signup`, {
     if (!res.ok) {
       return res.json()
         .then((err) => {
-          if (err.error) {
-            // throw new BadRequestError(err.error);
-          } else {
-            // throw new BadRequestError(err.message);
-          }
+          console.log(err);
         });
     }
     return res.json();
