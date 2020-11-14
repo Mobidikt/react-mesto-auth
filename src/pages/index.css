@@ -10,103 +10,14 @@
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/popup/popup.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/notFound/notFound.css);
+@import url(../blocks/entry/entry.css);
+@import url(../blocks/link/link.css);
 
-.entry__input {
-  width: 100%;
-  height: 27px;
-  margin: 0 0 30px;
-  padding: 0 0 12px;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  border: none;
-  color: #cccccc;
-  border-bottom: 2px solid #cccccc;
-  background-color: transparent;
-  outline: none;
-}
-.entry__input::-webkit-input-placeholder {
-    color: #cccccc;
-}
-.entry__input:focus::-webkit-input-placeholder {
-    opacity: 0;
-}
-.entry__field:last-of-type {
-    margin-bottom: 216px;
-}
-@media screen and (max-width: 555px) {
-  .entry__input {
-    height: 24px;
-    padding-bottom: 11px;
-    font-size: 12px;
-  }
-}
-.entry__button {
-  width: 100%;
-  height: 50px;
-  color: #000000;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 22px;
-  text-align: center;
-  background-color: #ffffff;
-  margin: 0 auto 15px;
-  border: none;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  cursor: pointer;
-  border-radius: 2px;
-  outline: none;
-}
-.entry__button:hover {
-  opacity: 0.85;
-}
 
-@media screen and (max-width: 555px) {
-  .entry__button {
-    height: 40px;
-    font-size: 14px;
-  }
-}
-.entry{
-    max-width: 358px;
-    margin: 0 auto 0;
-    display: flex;
-    flex-direction: column;
-}
-@media screen and (max-width: 555px) {
-  .entry{
-    width: 260px;
-  }
-}
-.entry__title{
-    font-family: Inter;
-font-style: normal;
-font-weight: 900;
-font-size: 24px;
-line-height: 29px;
-text-align: center;
-color: #FFFFFF;
-}
-.entry__text{ 
-    font-family: Inter;
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 17px;
-color: #FFFFFF;
-text-align: center;
-}
-.link{
-color: #FFFFFF;
-text-decoration: none;
-cursor: pointer;
-}
-.link:hover{
-opacity: 0.6;
-}
+
+
+
+
+
+

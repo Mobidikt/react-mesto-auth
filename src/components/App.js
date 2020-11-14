@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useHistory, Switch, Route} from 'react-router-dom';
+import {useHistory, Switch, Route, Redirect} from 'react-router-dom';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -16,6 +16,7 @@ import Register from './Register';
 import Login from './Login';
 import { ROUTES_MAP } from '../utils/routesMap';
 import { register, login, getToken } from '../utils/author';
+import NotFound from './NotFound';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -27,11 +28,26 @@ function App() {
   const [currentUser, setCurrentUser] = useState("");
   const [cards, setCards] = useState([]);
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [iconPopup, setIconPopup] = useState(true);
+  const [email, setEmail] = useState('');
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
- // const history = useHistory();
+  const history = useHistory();
 
+  useEffect(()=>{
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      getToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail(res.data.email);
+          history.push('/');
+        })
+        .catch((err) => console.log(err));
+    }
+},[history])
   useEffect(() => {
+    if(loggedIn){
     api
       .getUserInfo()
       .then((userInfo) => {
@@ -39,8 +55,8 @@ function App() {
       })
       .catch((err) => {
         console.log(`Данные о пользователе не получены. ${err}`);
-      });
-  }, []);
+      });}
+  }, [loggedIn]);
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
@@ -79,6 +95,7 @@ function App() {
       .finally(() => {});
   }
   useEffect(() => {
+    if(loggedIn){
     api
       .getInitialCards()
       .then((card) => {
@@ -86,8 +103,8 @@ function App() {
       })
       .catch((err) => {
         console.log(`Данные карточек не получены. ${err}`);
-      });
-  }, []);
+      });}
+  }, [loggedIn]);
 
   const handleUpdateUser = (info) => {
     api
@@ -162,20 +179,35 @@ function App() {
   }
 
   const handleLogin =(password, email) =>{
-    login(password, email);
-    setInfoTooltipOpen(true);
-    setEventListeners();
-  }
+    login(password, email).then((token)=>{
+      getToken(token).then((res)=>{
+      setEmail(res.data.email);
+    })
+    .catch((err)=>{console.log(err)});
+    setLoggedIn(true);
+    history.push('/');
+  })};
   const handleRegister =(password, email) =>{
-    console.log(password, email);
-    setInfoTooltipOpen(true);
-    setEventListeners();
+    register(password, email)
+    .then(()=>{
+      setIconPopup(true);
+      setInfoTooltipOpen(true);
+      setEventListeners();
+    })
+    .catch(()=>{
+      setIconPopup(false);
+      setInfoTooltipOpen(true);
+      setEventListeners();
+    });
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header 
+          email={email}
+          login={loggedIn}
+        />
         <Switch>
           <Route path={ROUTES_MAP.SIGN_UP}>
             <Register onRegister={handleRegister}/>
@@ -184,6 +216,7 @@ function App() {
             <Login onLogin={handleLogin}/>
           </Route>
           <ProtectedRoute exact path={ROUTES_MAP.MAIN}
+              loggedIn={loggedIn}
               component={Main}
               cards={cards}
               onCardLike={handleCardLike}
@@ -193,6 +226,10 @@ function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
             />
+          <Route path={ROUTES_MAP.NOT_FOUND} exact>
+            <NotFound login={loggedIn} />
+          </Route>
+          <Redirect to={ROUTES_MAP.NOT_FOUND} />
         </Switch>
         <Footer />
 
@@ -225,7 +262,7 @@ function App() {
         <InfoTooltip 
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
-          loged={loggedIn}
+          loged={iconPopup}
         />
       </div>
     </CurrentUserContext.Provider>
