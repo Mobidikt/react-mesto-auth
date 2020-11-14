@@ -187,9 +187,17 @@ function App() {
     history.push('/');
   })};
   const handleRegister =(password, email) =>{
-    register(password, email);
-    setInfoTooltipOpen(true);
-    setEventListeners();
+    register(password, email)
+    .then(()=>{
+      setIconPopup(true);
+      setInfoTooltipOpen(true);
+      setEventListeners();
+    })
+    .catch(()=>{
+      setIconPopup(false);
+      setInfoTooltipOpen(true);
+      setEventListeners();
+    });
   }
 
   return (

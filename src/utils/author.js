@@ -12,11 +12,10 @@ export const register = (password, email) =>  fetch(`${baseUrl}/signup`, {
       return res.json()
         .then((err) => {
           if(err.error){
-            console.log('пользователь с таким email уже зарегистрирован')
+            throw console.log('пользователь с таким email уже зарегистрирован')
           } else {
-            console.log('некорректно заполнено одно из полей');
+            throw console.log('некорректно заполнено одно из полей');
           }
-          return 
         });
     };
     return res.json();
