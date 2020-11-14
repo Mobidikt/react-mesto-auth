@@ -31,8 +31,20 @@ function App() {
   const [iconPopup, setIconPopup] = useState(true);
   const [email, setEmail] = useState('');
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
- // const history = useHistory();
+  const history = useHistory();
 
+  useEffect(()=>{
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      getToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail(res.data.email);
+          history.push('/');
+        })
+        .catch((err) => console.log(err));
+    }
+},[history])
   useEffect(() => {
     if(loggedIn){
     api
@@ -167,12 +179,13 @@ function App() {
 
   const handleLogin =(password, email) =>{
     login(password, email).then((token)=>{
-      getToken(token).then(({id, email})=>{
-      setEmail(email);
-      setLoggedIn(true)})
-      .catch((err)=>{console.log(err)});
-  })
-  };
+      getToken(token).then((res)=>{
+      setEmail(res.data.email);
+    })
+    .catch((err)=>{console.log(err)});
+    setLoggedIn(true);
+    history.push('/');
+  })};
   const handleRegister =(password, email) =>{
     register(password, email);
     setInfoTooltipOpen(true);
@@ -182,7 +195,10 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header email={email}/>
+        <Header 
+          email={email}
+          login={loggedIn}
+        />
         <Switch>
           <Route path={ROUTES_MAP.SIGN_UP}>
             <Register onRegister={handleRegister}/>
@@ -191,6 +207,7 @@ function App() {
             <Login onLogin={handleLogin}/>
           </Route>
           <ProtectedRoute exact path={ROUTES_MAP.MAIN}
+              loggedIn={loggedIn}
               component={Main}
               cards={cards}
               onCardLike={handleCardLike}

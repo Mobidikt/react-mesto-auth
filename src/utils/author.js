@@ -13,9 +13,10 @@ export const register = (password, email) =>  fetch(`${baseUrl}/signup`, {
         .then((err) => {
           if(err.error){
             console.log('пользователь с таким email уже зарегистрирован')
+          } else {
+            console.log('некорректно заполнено одно из полей');
           }
-          console.log('некорректно заполнено одно из полей');
-          return res.json()
+          return 
         });
     };
     return res.json();
