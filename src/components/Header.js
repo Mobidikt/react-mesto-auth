@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import headerLogo from '../images/header/logo.svg';
 import { ROUTES_MAP } from '../utils/routesMap';
-function Header() {
+function Header({email}) {
   return <Switch>
     <Route path='/404' exact/>
     <Route path='*'>
@@ -14,6 +14,9 @@ function Header() {
         </Route>
         <Route path='/sign-in'>
           <Link className='header__button' to={ROUTES_MAP.SIGN_UP}>Регистрация</Link>
+        </Route>
+        <Route path='/' exact>
+          <p className='header__text'>{email}</p>
         </Route>
       </Switch>
       </header>

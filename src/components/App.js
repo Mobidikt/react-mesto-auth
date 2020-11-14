@@ -27,11 +27,14 @@ function App() {
   const [currentUser, setCurrentUser] = useState("");
   const [cards, setCards] = useState([]);
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [iconPopup, setIconPopup] = useState(true);
+  const [email, setEmail] = useState('');
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
  // const history = useHistory();
 
   useEffect(() => {
+    if(loggedIn){
     api
       .getUserInfo()
       .then((userInfo) => {
@@ -39,8 +42,8 @@ function App() {
       })
       .catch((err) => {
         console.log(`Данные о пользователе не получены. ${err}`);
-      });
-  }, []);
+      });}
+  }, [loggedIn]);
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
@@ -79,6 +82,7 @@ function App() {
       .finally(() => {});
   }
   useEffect(() => {
+    if(loggedIn){
     api
       .getInitialCards()
       .then((card) => {
@@ -86,8 +90,8 @@ function App() {
       })
       .catch((err) => {
         console.log(`Данные карточек не получены. ${err}`);
-      });
-  }, []);
+      });}
+  }, [loggedIn]);
 
   const handleUpdateUser = (info) => {
     api
@@ -162,12 +166,15 @@ function App() {
   }
 
   const handleLogin =(password, email) =>{
-    login(password, email);
-    setInfoTooltipOpen(true);
-    setEventListeners();
-  }
+    login(password, email).then((token)=>{
+      getToken(token).then(({id, email})=>{
+      setEmail(email);
+      setLoggedIn(true)})
+      .catch((err)=>{console.log(err)});
+  })
+  };
   const handleRegister =(password, email) =>{
-    console.log(password, email);
+    register(password, email);
     setInfoTooltipOpen(true);
     setEventListeners();
   }
@@ -175,7 +182,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header email={email}/>
         <Switch>
           <Route path={ROUTES_MAP.SIGN_UP}>
             <Register onRegister={handleRegister}/>
@@ -225,7 +232,7 @@ function App() {
         <InfoTooltip 
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
-          loged={loggedIn}
+          loged={iconPopup}
         />
       </div>
     </CurrentUserContext.Provider>
