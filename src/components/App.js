@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useHistory, Switch, Route} from 'react-router-dom';
+import {useHistory, Switch, Route, Redirect} from 'react-router-dom';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -16,6 +16,7 @@ import Register from './Register';
 import Login from './Login';
 import { ROUTES_MAP } from '../utils/routesMap';
 import { register, login, getToken } from '../utils/author';
+import NotFound from './NotFound';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -225,6 +226,10 @@ function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
             />
+          <Route path={ROUTES_MAP.NOT_FOUND} exact>
+            <NotFound login={loggedIn} />
+          </Route>
+          <Redirect to={ROUTES_MAP.NOT_FOUND} />
         </Switch>
         <Footer />
 
