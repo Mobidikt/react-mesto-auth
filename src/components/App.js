@@ -182,10 +182,14 @@ function App() {
     login(password, email).then((token)=>{
       getToken(token).then((res)=>{
       setEmail(res.data.email);
+      setLoggedIn(true);
+      history.push('/');
     })
-    .catch((err)=>{console.log(err)});
-    setLoggedIn(true);
-    history.push('/');
+    .catch((err)=>{
+      console.log(err);
+      setIconPopup(false);
+      setInfoTooltipOpen(true);
+      setEventListeners();});
   })};
   const handleRegister =(password, email) =>{
     register(password, email)
@@ -226,10 +230,14 @@ function App() {
               onAddPlace={handleAddPlaceClick}
               onCardClick={handleCardClick}
             />
-          <Route path={ROUTES_MAP.NOT_FOUND} exact>
+          {/* <Route exact path={ROUTES_MAP.NOT_FOUND}>
             <NotFound login={loggedIn} />
+          </Route> */}
+          <Route path='*'>{loggedIn ? 
+            <Redirect to={ROUTES_MAP.MAIN} /> :
+            <Redirect to={ROUTES_MAP.SIGN_IN} />
+          }
           </Route>
-          <Redirect to={ROUTES_MAP.NOT_FOUND} />
         </Switch>
         <Footer />
 
