@@ -1,60 +1,45 @@
-import {baseUrl} from './constants.js';
+class Author {
+  constructor({ serverUrl }) {
+    this._serverUrl = serverUrl;
+  }
 
-export const register = (password, email) =>  fetch(`${baseUrl}/signup`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ password, email }),
-})
-  .then((res) => {
-    if (!res.ok) {
-      return res.json()
-        .then((err) => {
-          if(err.error){
-            throw console.log('пользователь с таким email уже зарегистрирован')
-          } else {
-            throw console.log('некорректно заполнено одно из полей');
-          }
-        });
-    };
-    return res.json();
- });
-export const login = (password, email) => fetch(`${baseUrl}/signin`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ password, email }),
-})
-  .then((res) => {
-    if (res.status === 400) {
-      console.log("не передано одно из полей");
-    } 
-    if (res.status === 401){
-      console.log("пользователь с email не найден"); //Заменить на ответ для пользователя
-    }
-    return res.json();
-  }).then((data) => {
-     if (data.token) {
-      localStorage.setItem('jwt', data.token);
-      return data.token;
-    }
-});
-
-
-export const getToken = (token) => fetch(`${baseUrl}/users/me`,{
-    method: "GET",
+  _fetch(url, params) {
+    return fetch(this._serverUrl + url, params).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(res.status);
+    });
+  }
+  getToken(token) {
+    return this._fetch("/users/me", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization" : `Bearer ${token}`,
+        },
+    });
+  }
+  login (password, email) {
+    return this._fetch("/signin", {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
-}).then ((res)=>{
-    if(!res.ok) {
-        return res.json()
-            .then((err) =>{
-                console.log(err);
-            });
-    }
-    return res.json();
-}).then((data)=>data);
+      body: JSON.stringify({ password, email }),
+    });  
+  }
+  register (password, email) { 
+    return this._fetch("/signup", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password, email }),
+    });
+  }
+}
+const author = new Author({
+  serverUrl: 'https://auth.nomoreparties.co'
+});
+export default author;

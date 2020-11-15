@@ -15,7 +15,7 @@ import InfoTooltip from './InfoTooltip';
 import Register from './Register';
 import Login from './Login';
 import { ROUTES_MAP } from '../utils/routesMap';
-import { register, login, getToken } from '../utils/author';
+import author from '../utils/author';
 import NotFound from './NotFound';
 
 function App() {
@@ -37,13 +37,19 @@ function App() {
   useEffect(()=>{
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      getToken(jwt)
+      author.getToken(jwt)
         .then((res) => {
           setLoggedIn(true);
           setEmail(res.data.email);
           history.push('/');
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if(err === 401){
+            console.log("Переданный токен некорректен");
+          } else {
+            console.log(`Ошибка: ${err}`);
+          }
+        });
     }
 },[history])
   useEffect(() => {
@@ -173,35 +179,60 @@ function App() {
     setVerificationPopupOpen(false);
     setImagePopupOpen(false);
     setInfoTooltipOpen(false);
-    setSelectedCard(null);
+    // setSelectedCard(null);
     document.removeEventListener("keydown", handleEsc);
     document.removeEventListener("click", overlayClose);
   }
 
-  const handleLogin =(password, email) =>{
-    login(password, email).then((token)=>{
-      getToken(token).then((res)=>{
+  const handleLogin =( password, email ) =>{
+    author.login(password, email).then((res)=>{
+      localStorage.setItem('jwt', res.token); 
+      author.getToken(res.token).then((res)=>{
       setEmail(res.data.email);
       setLoggedIn(true);
       history.push('/');
     })
     .catch((err)=>{
-      console.log(err);
+      if(err === 401){
+        console.log("Переданный токен некорректен");
+      } else {
+        console.log(`Ошибка: ${err}`);
+      }
       setIconPopup(false);
       setInfoTooltipOpen(true);
-      setEventListeners();});
-  })};
+      setEventListeners();
+    });
+  }).catch((err)=>{
+    if (err === 400) {
+      return console.log("Не передано одно из полей");
+    } 
+    if (err === 401){
+      return console.log("Пользователь с email не найден");
+    } else {
+      return console.log(`Ошибка: ${err}`);
+    }
+  })
+};
   const handleRegister =(password, email) =>{
-    register(password, email)
-    .then(()=>{
-      setIconPopup(true);
-      setInfoTooltipOpen(true);
-      setEventListeners();
-    })
-    .catch(()=>{
-      setIconPopup(false);
-      setInfoTooltipOpen(true);
-      setEventListeners();
+    author.register(password, email)
+      .then(()=>{
+        setIconPopup(true);
+        setInfoTooltipOpen(true);
+        setEventListeners();
+      history.push('/sign-in');
+      })
+      .catch((err)=>{
+        if (err === 400) {
+          setIconPopup(false);
+          setInfoTooltipOpen(true);
+          setEventListeners();
+          return console.log("Некорректно заполнено одно из полей");
+        } else {  //если статус ошибки не 400
+          setIconPopup(false);
+          setInfoTooltipOpen(true);
+          setEventListeners();
+          return console.log(`Ошибка: ${err}`);
+        }
     });
   }
 
